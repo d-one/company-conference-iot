@@ -8,13 +8,11 @@ import sys
 import time
 import logging
 import RPi.GPIO as GPIO
+from user_input import LED_PIN
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 logger.addHandler(logging.StreamHandler())
-
-# Set the LED pin number
-LED_PIN = 26
 
 # Set the GPIO modes
 GPIO.setmode(GPIO.BCM)
