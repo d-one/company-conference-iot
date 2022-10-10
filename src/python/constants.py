@@ -8,20 +8,17 @@ Description: This script contains constants used in company-conference-iot
 _REMOTE = False
 
 # RPi paths
-HOME = '/home/done1/'
-REPO = 'hamsterwheel'
+HOME = '/home/done2/'
+REPO = 'company-conference-iot'
 LOGS = '/logs/'
 
 # Log file for the hamsterwheel readout code
-FILENAME_LOG_HAMSTERWHEEL = 'hamsterwheel.log'
-# Log file for the handler of the script
-FILENAME_LOG_PUBLISHIP = 'hamsterwheel_handler.log'
+FILENAME_LOG_PUBLISHIP = 'publish_ip.log'
 # Filename for the script to retrieve ifconfig results
 FILENAME_GET_WLAN = 'get_wlan.sh'
 # Path to the bash script to retrieve ifconfig results
 BASH_GET_WLAN = f'/{REPO}/src/bash/{FILENAME_GET_WLAN}'
 
-LOG_HAMSTERWHEEL = f'{HOME}{LOGS}{FILENAME_LOG_HAMSTERWHEEL}'
 LOG_PUBLISHIP = f'{HOME}{LOGS}{FILENAME_LOG_PUBLISHIP}'
 
 # AWS
