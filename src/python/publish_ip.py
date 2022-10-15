@@ -10,14 +10,16 @@ from utils import log
 
 from constants import (
     BASH_GET_WLAN,
-    AWS_CLIENT_NAME,
-    AWS_ENDPOINT,
-    AWS_CA_FILE,
-    AWS_KEY,
-    AWS_CERT,
 )
 
+AWS_CLIENT_NAME = "doneX"
 LOG_PUBLISHIP = f'/home/doneX/logs/publish_ip.log'
+
+AWS_ENDPOINT = "aka77kba04erw-ats.iot.eu-west-1.amazonaws.com"
+AWS_CA_FILE = "/home/certificates/AmazonRootCA1.pem"
+AWS_KEY = "/home/certificates/private.pem.key"
+AWS_CERT = "/home/certificates/certificate.pem.crt"
+
 
 
 class PublishIp():

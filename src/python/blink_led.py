@@ -29,6 +29,7 @@ try:
         logger.info("## Turned LED OFF.")
         time.sleep(1)
         cnt += 1
+    logger.info("## Done with the blinking!")
     GPIO.cleanup()
 
 except KeyboardInterrupt:

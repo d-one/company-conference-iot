@@ -25,10 +25,3 @@ BASH_GET_WLAN = f'/{REPO}/src/bash/{FILENAME_GET_WLAN}'
 
 LOG_PUBLISHIP = f'{HOME}{LOGS}{FILENAME_LOG_PUBLISHIP}'
 LOG_MAIN = f'{HOME}{LOGS}{FILENAME_LOG_MAIN}'
-
-# AWS
-AWS_CLIENT_NAME = "doneX"
-AWS_ENDPOINT = "aka77kba04erw-ats.iot.eu-west-1.amazonaws.com"
-AWS_CA_FILE = "/home/certificates/AmazonRootCA1.pem"
-AWS_KEY = "/home/certificates/private.pem.key"
-AWS_CERT = "/home/certificates/certificate.pem.crt"
