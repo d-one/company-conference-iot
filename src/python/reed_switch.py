@@ -127,7 +127,7 @@ class ReedSwitch():
         # Set LED pin
         io.setup(self._led_pin, io.OUT)
         msg = f'Set up GPIO, using led pin {self._led_pin}'
-        log(log_path=LOG_MAIN logmsg=msg, printout=True)
+        log(log_path=LOG_MAIN, logmsg=msg, printout=True)
 
         # Set wheel pin
         io.setup(self._switch_pin, io.IN, pull_up_down=io.PUD_UP)
