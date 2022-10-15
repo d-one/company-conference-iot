@@ -10,13 +10,14 @@ from utils import log
 
 from constants import (
     BASH_GET_WLAN,
-    LOG_PUBLISHIP,
     AWS_CLIENT_NAME,
     AWS_ENDPOINT,
     AWS_CA_FILE,
     AWS_KEY,
     AWS_CERT,
 )
+
+LOG_PUBLISHIP = f'/home/doneX/logs/publish_ip.log'
 
 
 class PublishIp():

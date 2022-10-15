@@ -4,18 +4,19 @@ from typing import List, Optional
 
 import RPi.GPIO as io
 
-from constants import LOG_HAMSTERWHEEL
+from constants import LOG_MAIN
+from user_input import LED_PIN, SWITCH_PIN
 from utils import log
 
 
-class HamsterWheel():
-    """Class to handle data collection for the hamsterwheel.
+class ReedSwitch():
+    """Class to handle data collection for the reed switch.
 
     Attributes:
         mode: Controls output location of the sensor data.
             Currently supports: local
-        wheelpin: GPIO pin to communicate with the reed sensor.
-        wheelpin: GPIO pin to control the LED.
+        switch_pin: GPIO pin to communicate with the reed sensor.
+        led_pin: GPIO pin to control the LED.
         deadtime: Readout dead time to protect the sensor in seconds.
             Defaults to 1 second.
         local_log_path: Full path to store the readout data in local mode.
@@ -26,16 +27,16 @@ class HamsterWheel():
     def __init__(
         self,
         mode: List[str],
-        wheelpin: int,
-        ledpin: int,
+        switch_pin: int,
+        led_pin: int,
         deadtime: float = 1.0,
         local_log_path: Optional[str] = None,
     ) -> None:
         self._local_log_path = local_log_path
-        self._mode = HamsterWheel._validate_mode(mode=mode, local_log_path=local_log_path)
-        self._wheelpin = HamsterWheel._validate_pin(pin=wheelpin)
-        self._ledpin = HamsterWheel._validate_pin(pin=ledpin)
-        self._deadtime = HamsterWheel._validate_deadtime(deadtime=deadtime)
+        self._mode = ReedSwitch._validate_mode(mode=mode, local_log_path=local_log_path)
+        self._switch_pin = ReedSwitch._validate_pin(pin=switch_pin)
+        self._led_pin = ReedSwitch._validate_pin(pin=led_pin)
+        self._deadtime = ReedSwitch._validate_deadtime(deadtime=deadtime)
 
     @classmethod
     def _validate_mode(cls, mode: List[str], local_log_path: Optional[str] = None) -> List[str]:
@@ -54,9 +55,9 @@ class HamsterWheel():
         try:
             assert isinstance(mode, list)
             for set_mode in mode:
-                assert set_mode in HamsterWheel.supported_modes
+                assert set_mode in ReedSwitch.supported_modes
         except AssertionError:
-            errmsg = f'Mode {mode} is not among the supported modes {HamsterWheel.supported_modes}.'
+            errmsg = f'Mode {mode} is not among the supported modes {ReedSwitch.supported_modes}.'
             raise ValueError(errmsg) from AssertionError
 
         # Make sure that a file path for local storage is set
@@ -124,14 +125,14 @@ class HamsterWheel():
         io.setmode(io.BCM)
 
         # Set LED pin
-        io.setup(self._ledpin, io.OUT)
-        msg = f'Set up GPIO, using led pin {self._ledpin}'
-        log(log_path=LOG_HAMSTERWHEEL, logmsg=msg, printout=True)
+        io.setup(self._led_pin, io.OUT)
+        msg = f'Set up GPIO, using led pin {self._led_pin}'
+        log(log_path=LOG_MAIN logmsg=msg, printout=True)
 
         # Set wheel pin
-        io.setup(self._wheelpin, io.IN, pull_up_down=io.PUD_UP)
-        msg = f'Set up GPIO, using wheel pin {self._wheelpin}'
-        log(log_path=LOG_HAMSTERWHEEL, logmsg=msg, printout=True)
+        io.setup(self._switch_pin, io.IN, pull_up_down=io.PUD_UP)
+        msg = f'Set up GPIO, using wheel pin {self._switch_pin}'
+        log(log_path=LOG_MAIN, logmsg=msg, printout=True)
 
 
     def readout(self) -> None:
@@ -143,25 +144,25 @@ class HamsterWheel():
         self._setup_rpi()
 
         msg = 'Started script...'
-        log(log_path=LOG_HAMSTERWHEEL, logmsg=msg, printout=True)    
+        log(log_path=LOG_MAIN, logmsg=msg, printout=True)    
 
         try:
             # Readout loop
             while True:
                 msg = 'Running...'
-                log(log_path=LOG_HAMSTERWHEEL, logmsg=msg, printout=True)
+                log(log_path=LOG_MAIN, logmsg=msg, printout=True)
                 time.sleep(self._deadtime)
-                if io.input(self._wheelpin) == 0:
+                if io.input(self._switch_pin) == 0:
                     if 'local' in self._mode:
                         # Turn LED on
-                        io.output(self._ledpin, io.HIGH)
+                        io.output(self._led_pin, io.HIGH)
                         # Record that loop is closed
                         msg = '0'
                         log(log_path=self._local_log_path, logmsg=msg, printout=True)
                 else:
                     if 'local' in self._mode:
                         # Turn LED off
-                        io.output(self._ledpin, io.LOW)
+                        io.output(self._led_pin, io.LOW)
                         # Record that loop is open
                         msg = '1'
                         log(log_path=self._local_log_path, logmsg=msg, printout=True)
@@ -172,11 +173,11 @@ class HamsterWheel():
 
 
 if __name__ == "__main__":
-    hamsterwheel = HamsterWheel(
+    reedswitch = ReedSwitch(
         mode=['local'],
-        wheelpin=4,
-        ledpin=26,
+        switch_pin=SWITCH_PIN,
+        led_pin=LED_PIN,
         deadtime=1.0,
-        local_log_path=LOG_HAMSTERWHEEL
+        local_log_path=LOG_MAIN
     )
-    hamsterwheel.readout()
+    reedswitch.readout()

@@ -7,27 +7,28 @@ import RPi.GPIO as io
 
 from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
 
-from constants import (
-    LOG_HAMSTERWHEEL,
+from user_input import (
+    AWS_CA_FILE,
+    AWS_CERT,
     AWS_CLIENT_NAME,
     AWS_ENDPOINT,
-    AWS_CA_FILE,
     AWS_KEY,
-    AWS_CERT,
     AWS_TOPIC,
+    LED_PIN,
+    SWITCH_PIN
 )
-
+from constants import LOG_MAIN
 from utils import log
 
 
-class HamsterWheel():
-    """Class to handle data collection for the hamsterwheel.
+class IoTAWSStreaming():
+    """Class to handle data collection from a reed sensor and streaming into AWS.
 
     Attributes:
         mode: Controls output location of the sensor data.
             Currently supports: local
-        wheelpin: GPIO pin to communicate with the reed sensor.
-        wheelpin: GPIO pin to control the LED.
+        switch_pin: GPIO pin to communicate with the reed sensor.
+        led_pin: GPIO pin to control the LED.
         deadtime: Readout dead time to protect the sensor in seconds.
             Defaults to 1 second.
         local_log_path: Full path to store the readout data in local mode.
@@ -38,16 +39,16 @@ class HamsterWheel():
     def __init__(
         self,
         mode: List[str],
-        wheelpin: int,
-        ledpin: int,
+        switch_pin: int,
+        led_pin: int,
         deadtime: float = 1.0,
         local_log_path: Optional[str] = None,
     ) -> None:
         self._local_log_path = local_log_path
-        self._mode = HamsterWheel._validate_mode(mode=mode, local_log_path=local_log_path)
-        self._wheelpin = HamsterWheel._validate_pin(pin=wheelpin)
-        self._ledpin = HamsterWheel._validate_pin(pin=ledpin)
-        self._deadtime = HamsterWheel._validate_deadtime(deadtime=deadtime)
+        self._mode = IoTAWSStreaming._validate_mode(mode=mode, local_log_path=local_log_path)
+        self._switch_pin = IoTAWSStreaming._validate_pin(pin=switch_pin)
+        self._led_pin = IoTAWSStreaming._validate_pin(pin=led_pin)
+        self._deadtime = IoTAWSStreaming._validate_deadtime(deadtime=deadtime)
 
     @classmethod
     def _validate_mode(cls, mode: List[str], local_log_path: Optional[str] = None) -> List[str]:
@@ -66,9 +67,9 @@ class HamsterWheel():
         try:
             assert isinstance(mode, list)
             for set_mode in mode:
-                assert set_mode in HamsterWheel.supported_modes
+                assert set_mode in IoTAWSStreaming.supported_modes
         except AssertionError:
-            errmsg = f'Mode {mode} is not among the supported modes {HamsterWheel.supported_modes}.'
+            errmsg = f'Mode {mode} is not among the supported modes {IoTAWSStreaming.supported_modes}.'
             raise ValueError(errmsg) from AssertionError
 
         # Make sure that a file path for local storage is set
@@ -136,14 +137,14 @@ class HamsterWheel():
         io.setmode(io.BCM)
 
         # Set LED pin
-        io.setup(self._ledpin, io.OUT)
-        msg = f'Set up GPIO, using led pin {self._ledpin}'
-        log(log_path=LOG_HAMSTERWHEEL, logmsg=msg, printout=True)
+        io.setup(self._led_pin, io.OUT)
+        msg = f'Set up GPIO, using led pin {self._led_pin}'
+        log(log_path=LOG_MAIN, logmsg=msg, printout=True)
 
         # Set wheel pin
-        io.setup(self._wheelpin, io.IN, pull_up_down=io.PUD_UP)
-        msg = f'Set up GPIO, using wheel pin {self._wheelpin}'
-        log(log_path=LOG_HAMSTERWHEEL, logmsg=msg, printout=True)
+        io.setup(self._switch_pin, io.IN, pull_up_down=io.PUD_UP)
+        msg = f'Set up GPIO, using wheel pin {self._switch_pin}'
+        log(log_path=LOG_MAIN, logmsg=msg, printout=True)
 
     def setup_aws(self) -> AWSIoTMQTTClient:
         """Method to set up communication with AWS.
@@ -174,7 +175,7 @@ class HamsterWheel():
             "{\"Timestamp\" :\"" + str(now) +
             "\", \"Message\":\"" + message + "\"}", 0)
         msg = f'Published to topic {topic} with message {message}.'
-        log(log_path=LOG_HAMSTERWHEEL, logmsg=msg, printout=True)
+        log(log_path=LOG_MAIN, logmsg=msg, printout=True)
         
 
     def readout(self) -> None:
@@ -191,36 +192,36 @@ class HamsterWheel():
             mqtt_connection = mqtt_client.connect()
 
         msg = 'Started script...'
-        log(log_path=LOG_HAMSTERWHEEL, logmsg=msg, printout=True)
+        log(log_path=LOG_MAIN, logmsg=msg, printout=True)
       
         try:
             # Readout loop
             while True:
                 msg = 'Running...'
-                log(log_path=LOG_HAMSTERWHEEL, logmsg=msg, printout=True)
+                log(log_path=LOG_MAIN, logmsg=msg, printout=True)
                 time.sleep(self._deadtime)
-                if io.input(self._wheelpin) == 0:
+                if io.input(self._switch_pin) == 0:
                     msg = '0'
                     if 'local' in self._mode:
                         # Turn LED on
-                        io.output(self._ledpin, io.HIGH)
+                        io.output(self._led_pin, io.HIGH)
                         log(log_path=self._local_log_path, logmsg=msg, printout=True)
                     if 'aws' in self._mode:
                         if mqtt_client is None:
                             msg = 'Error, MQTT client not initialized.'
-                            log(log_path=LOG_HAMSTERWHEEL, logmsg=msg, printout=True)
+                            log(log_path=LOG_MAIN, logmsg=msg, printout=True)
                         else:
                             self.send_message(topic=AWS_TOPIC, message=msg, mqtt_client=mqtt_client)
                 else:
                     msg = '1'
                     if 'local' in self._mode:
                         # Turn LED off
-                        io.output(self._ledpin, io.LOW)  
+                        io.output(self._led_pin, io.LOW)  
                         log(log_path=self._local_log_path, logmsg=msg, printout=True)
                     if 'aws' in self._mode:
                         if mqtt_client is None:
                             msg = 'Error, MQTT client not initialized.'
-                            log(log_path=LOG_HAMSTERWHEEL, logmsg=msg, printout=True)
+                            log(log_path=LOG_MAIN, logmsg=msg, printout=True)
                         else:
                             self.send_message(topic=AWS_TOPIC, message=msg, mqtt_client=mqtt_client)
 
@@ -232,11 +233,11 @@ class HamsterWheel():
 
 
 if __name__ == "__main__":
-    hamsterwheel = HamsterWheel(
+    iotawsstreaming = IoTAWSStreaming(
         mode=['local', 'aws'],
-        wheelpin=4,
-        ledpin=26,
+        switch_pin=SWITCH_PIN,
+        led_pin=LED_PIN,
         deadtime=1.0,
-        local_log_path=LOG_HAMSTERWHEEL
+        local_log_path=LOG_MAIN
     )
-    hamsterwheel.readout()
+    iotawsstreaming.readout()
