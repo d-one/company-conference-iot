@@ -2,23 +2,24 @@ import time
 import RPi.GPIO as io
 import sys
 import json
-
+from user_input import LED_PIN, SWITCH_PIN
 from azure.iot.device import IoTHubDeviceClient, Message
 
-# Replace with the corresponding connection string from your device in Az IoT Hub
-CONNECTION_STRING = "enter_conn_str_here"
+# adding external folder with Azure constr to python path for import
+sys.path.insert(0, '/home/certificates')
+import azure_constr as az
+
+# setting the connection string and device name using values from the file
+CONNECTION_STRING = az.IOT_HUB_CON_STR
+deviceID = az.DEVICE_ID
 
 # Set Broadcom mode so we can address GPIO pins by number.
 io.setmode(io.BCM)
-
-wheelpin = 4
-LED_PIN = 26
-io.setup(wheelpin, io.IN, pull_up_down=io.PUD_UP)
+io.setup(SWITCH_PIN, io.IN, pull_up_down=io.PUD_UP)
 io.setup(LED_PIN, io.OUT)
 
 # Define the JSON message variables to send to IoT Hub.
 messageEpoch = time.time()
-deviceID = "enter_device_id_here"
 magnet = 0
 
 def iothub_client_init():
@@ -35,10 +36,10 @@ def iothub_client_telemetry_sample_run():
             # Build the message with magnet telemetry values.
             messageEpoch = time.time()
             time.sleep(1)
-            if (io.input(wheelpin) == 0):
+            if (io.input(SWITCH_PIN) == 0):
                 magnet = 1
                 io.output(LED_PIN, io.HIGH)
-                msg_dict = {"messageEpoch":messageEpoch, "deviceID":deviceID, "magnet":magnet, "pin_num":wheelpin}
+                msg_dict = {"messageEpoch":messageEpoch, "deviceID":deviceID, "magnet":magnet, "pin_num":SWITCH_PIN}
                 message = Message(json.dumps(msg_dict))
                 # ensure proper encoding and content type are enforced (again to avoid de-serialization issues)
                 message.content_encoding = "utf-8"
@@ -52,7 +53,7 @@ def iothub_client_telemetry_sample_run():
                 magnet = 0
                 io.output(LED_PIN, io.LOW)
                 # needs to be a python dict, otherwsie de-serialization errors will occur on Azure sid
-                msg_dict = {"messageEpoch":messageEpoch, "deviceID":deviceID, "magnet":magnet, "pin_num":wheelpin}
+                msg_dict = {"messageEpoch":messageEpoch, "deviceID":deviceID, "magnet":magnet, "pin_num":SWITCH_PIN}
                 message = Message(json.dumps(msg_dict))
                 # ensure proper encoding and content type are enforced (again to avoid de-serialization issues)
                 message.content_encoding = "utf-8"
