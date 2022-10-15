@@ -15,9 +15,8 @@ from constants import (
     AWS_CA_FILE,
     AWS_KEY,
     AWS_CERT,
+    LOG_PUBLISHIP
 )
-
-LOG_PUBLISHIP = f'/home/doneX/logs/publish_ip.log'
 
 
 class PublishIp():
