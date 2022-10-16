@@ -19,6 +19,7 @@ AWS_ENDPOINT = 'xxxxxxxxxxxxxxx-ats.iot.eu-central-1.amazonaws.com'  # Add the e
 AWS_CA_FILE = '/home/xxx/xxx/AmazonRootCA1.pem'  # Add path to the CA here
 AWS_KEY = '/home/xxx/xxx/private.pem.key'  # Add path to the private key here
 AWS_CERT = '/home/xxx/xxx/certificate.pem.crt'  # Add path to the certificate here
+AWS_TOPIC = f'topic/YOUR TOPIC NAME HERE'  # Add the topic name here
 
 AWS_CLIENT_NAME = f'done{DEVICE_NUMBER}'  # DO NOT EDIT THIS
-AWS_TOPIC = f'topic/{AWS_CLIENT_NAME}'  # DO NOT EDIT THIS
+
