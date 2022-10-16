@@ -5,11 +5,11 @@ Description: This script contains user input for the company conference workshop
 ===================================================================================================
 """
 # General
-USER_NAME = 'animalX'  # Add your user name here
+USER_NAME = 'YOUR USERNAME HERE'  # Add your user name here
 
 # GPIO
-LED_PIN = 26  # GPIO pin where the LED is connected to
-SWITCH_PIN = 4  # GPIO pin where the reed switch is connected to
+LED_PIN = 999  # GPIO pin where the LED is connected to
+SWITCH_PIN = 999  # GPIO pin where the reed switch is connected to
 
 # Azure
 
