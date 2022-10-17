@@ -12,7 +12,7 @@ _REMOTE = False
 # RPi paths
 HOME = f'/home/{USER_NAME}/'
 REPO = 'company-conference-iot'
-LOGS = '/logs/'
+LOGS = 'logs/'
 
 # Log file for the publishing of the ip
 FILENAME_LOG_PUBLISHIP = 'publish_ip.log'

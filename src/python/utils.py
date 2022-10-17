@@ -16,6 +16,12 @@ logger.setLevel(logging.INFO)
 logger.addHandler(logging.StreamHandler())
 
 
+def safe_open_folder(path, mode):
+    ''' Open "path" for writing, creating any parent directories as needed.
+    '''
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    return open(path, mode)
+
 def log(log_path: str, logmsg: str, printout: bool = False) -> None:
     """Function to add a line to a logfile.
 
@@ -33,7 +39,7 @@ def log(log_path: str, logmsg: str, printout: bool = False) -> None:
     if printout:
         logger.info(f"## Added log message: {logmsg}.")
 
-    with open(log_path, 'a') as file:
+    with safe_open_folder(log_path, 'a+') as file:
         file.write('\n')
         file.write(logmsg)
         file.close()
