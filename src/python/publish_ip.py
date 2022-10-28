@@ -13,7 +13,7 @@ from constants import (
 )
 
 AWS_CLIENT_NAME = "doneX"
-LOG_PUBLISHIP = f'/home/doneX/logs/publish_ip.log'
+LOG_PUBLISHIP = f'/home/{AWS_CLIENT_NAME}/logs/publish_ip.log'
 
 AWS_ENDPOINT = "aka77kba04erw-ats.iot.eu-west-1.amazonaws.com"
 AWS_CA_FILE = "/home/certificates/AmazonRootCA1.pem"
