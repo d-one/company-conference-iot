@@ -11,15 +11,6 @@ USER_NAME = 'YOUR USERNAME HERE'  # Add your user name here
 LED_PIN = 999  # GPIO pin where the LED is connected to
 SWITCH_PIN = 999  # GPIO pin where the reed switch is connected to
 
-# Azure
-
 # AWS
-DEVICE_NUMBER = 'X'  # Add your device number here, e.g., done4
-AWS_ENDPOINT = 'xxxxxxxxxxxxxxx-ats.iot.eu-central-1.amazonaws.com'  # Add the endpoint here
-AWS_CA_FILE = '/home/xxx/xxx/AmazonRootCA1.pem'  # Add path to the CA here
-AWS_KEY = '/home/xxx/xxx/private.pem.key'  # Add path to the private key here
-AWS_CERT = '/home/xxx/xxx/certificate.pem.crt'  # Add path to the certificate here
-AWS_TOPIC = f'topic/YOUR TOPIC NAME HERE'  # Add the topic name here
-
-AWS_CLIENT_NAME = f'done{DEVICE_NUMBER}'  # DO NOT EDIT THIS
-
+DEVICE_NUMBER = 'X'  # Add your device number here
+TOPIC = "YOUR TOPIC NAME HERE"  # Add the topic name here

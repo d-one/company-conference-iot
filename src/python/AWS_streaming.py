@@ -8,18 +8,20 @@ import RPi.GPIO as io
 from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
 
 from user_input import (
-    AWS_CA_FILE,
-    AWS_CERT,
-    AWS_CLIENT_NAME,
-    AWS_ENDPOINT,
-    AWS_KEY,
-    AWS_TOPIC,
+    DEVICE_NUMBER,
+    TOPIC,
     LED_PIN,
     SWITCH_PIN
 )
 from constants import LOG_MAIN
 from utils import log
 
+AWS_ENDPOINT = "aka77kba04erw-ats.iot.eu-west-1.amazonaws.com"
+AWS_CA_FILE = "/home/certificates/AmazonRootCA1.pem"
+AWS_KEY = "/home/certificates/private.pem.key"
+AWS_CERT = "/home/certificates/certificate.pem.crt"
+AWS_CLIENT_NAME = f'done{DEVICE_NUMBER}'
+AWS_TOPIC = f"topic/{TOPIC}"
 
 class IoTAWSStreaming():
     """Class to handle data collection from a reed sensor and streaming into AWS.
@@ -29,10 +31,10 @@ class IoTAWSStreaming():
             Currently supports: local
         switch_pin: GPIO pin to communicate with the reed sensor.
         led_pin: GPIO pin to control the LED.
-        deadtime: Readout dead time to protect the sensor in seconds.
-            Defaults to 1 second.
         local_log_path: Full path to store the readout data in local mode.
             Is required if 'local' is part of `mode`.
+        deadtime: Readout dead time to protect the sensor in seconds.
+            Defaults to 1 second.
     """
     supported_modes = ['local', 'aws']
 
@@ -41,8 +43,8 @@ class IoTAWSStreaming():
         mode: List[str],
         switch_pin: int,
         led_pin: int,
+        local_log_path: str,
         deadtime: float = 1.0,
-        local_log_path: Optional[str] = None,
     ) -> None:
         self._local_log_path = local_log_path
         self._mode = IoTAWSStreaming._validate_mode(mode=mode, local_log_path=local_log_path)

@@ -17,10 +17,10 @@ class ReedSwitch():
             Currently supports: local
         switch_pin: GPIO pin to communicate with the reed sensor.
         led_pin: GPIO pin to control the LED.
-        deadtime: Readout dead time to protect the sensor in seconds.
-            Defaults to 1 second.
         local_log_path: Full path to store the readout data in local mode.
             Is required if 'local' is part of `mode`.
+        deadtime: Readout dead time to protect the sensor in seconds.
+            Defaults to 1 second.
     """
     supported_modes = ['local']
 
@@ -29,8 +29,8 @@ class ReedSwitch():
         mode: List[str],
         switch_pin: int,
         led_pin: int,
+        local_log_path: str,
         deadtime: float = 1.0,
-        local_log_path: Optional[str] = None,
     ) -> None:
         self._local_log_path = local_log_path
         self._mode = ReedSwitch._validate_mode(mode=mode, local_log_path=local_log_path)

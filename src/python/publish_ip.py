@@ -1,4 +1,5 @@
 import os
+from typing import Optional
 from datetime import datetime
 import subprocess
 import time
@@ -27,17 +28,14 @@ class PublishIp():
     AWS IoT.
 
     Attributes:
-        username: username on the RaspberryPi. The output from the scripts to retrieve
-            the `ifconfig`-content will be stored in the home folder of this user.
         path_to_bash: Full path to the script to retrieve ifconfig information.
     """
 
     def __init__(
         self,
-        username: str = None,
-        path_to_bash: str = None
+        path_to_bash: Optional[str] = None
     ) -> None:
-        self.username = PublishIp._get_username() if username == None else username
+        self.username = PublishIp._get_username()
         if path_to_bash:
             self.path_to_bash = path_to_bash
         else:
