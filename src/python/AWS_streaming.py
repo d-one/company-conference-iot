@@ -153,7 +153,7 @@ class IoTAWSStreaming():
 
         """
         mqtt_client = AWSIoTMQTTClient(AWS_CLIENT_NAME)
-        mqtt_client.configureEndpoint(AWS_ENDPOINT, 8883)
+        mqtt_client.configureEndpoint(ENDPOINT, 8883)
 
         mqtt_client.configureCredentials(
             CAFilePath=AWS_CA_FILE,
