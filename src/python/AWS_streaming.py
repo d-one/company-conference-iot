@@ -11,12 +11,12 @@ from user_input import (
     DEVICE_NUMBER,
     TOPIC,
     LED_PIN,
-    SWITCH_PIN
+    SWITCH_PIN,
+    ENDPOINT
 )
 from constants import LOG_MAIN
 from utils import log
 
-AWS_ENDPOINT = "aka77kba04erw-ats.iot.eu-west-1.amazonaws.com"
 AWS_CA_FILE = "/home/certificates/AmazonRootCA1.pem"
 AWS_KEY = "/home/certificates/private.pem.key"
 AWS_CERT = "/home/certificates/certificate.pem.crt"

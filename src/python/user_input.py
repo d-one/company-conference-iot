@@ -5,7 +5,7 @@ Description: This script contains user input for the company conference workshop
 ===================================================================================================
 """
 # General
-USER_NAME = 'YOUR USERNAME HERE'  # Add your user name here
+USER_NAME = 'animalY'  # Add your user name here, e.g., cat4 or lion6. Check the user sheet.
 
 # GPIO
 LED_PIN = 999  # GPIO pin where the LED is connected to
@@ -14,3 +14,4 @@ SWITCH_PIN = 999  # GPIO pin where the reed switch is connected to
 # AWS
 DEVICE_NUMBER = 'X'  # Add your device number here
 TOPIC = "YOUR TOPIC NAME HERE"  # Add the topic name here
+ENDPOINT = "xxxxxxxxxx.iot.eu-west-1.amazonaws.com"  # Add AWS Endpoint here
