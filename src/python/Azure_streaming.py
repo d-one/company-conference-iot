@@ -23,8 +23,8 @@ messageEpoch = time.time()
 magnet = 0
 
 def iothub_client_init():
-    # Create an IoT Hub client
-    client = IoTHubDeviceClient.create_from_connection_string(CONNECTION_STRING)
+    # Create an IoT Hub client using protocol MQTT v3.1.1 over WebSocket on port 443.
+    client = IoTHubDeviceClient.create_from_connection_string(CONNECTION_STRING, websockets=True) 
     return client
 
 def iothub_client_telemetry_sample_run():
