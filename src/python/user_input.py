@@ -15,3 +15,7 @@ SWITCH_PIN = 999  # GPIO pin where the reed switch is connected to
 DEVICE_NUMBER = 'X'  # Add your device number here
 TOPIC = "YOUR TOPIC NAME HERE"  # Add the topic name here
 ENDPOINT = "xxxxxxxxxx.iot.eu-west-1.amazonaws.com"  # Add AWS Endpoint here
+
+# Azure
+DEVICE_ID = 'd-one-X' # Add your device ID here
+IOT_HUB_CON_STR = 'X' # Paste the Azure IoT Hub Primary Connection String here
