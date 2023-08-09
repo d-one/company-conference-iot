@@ -2,12 +2,16 @@ import time
 import RPi.GPIO as io
 import sys
 import json
-from user_input import LED_PIN, SWITCH_PIN, DEVICE_ID, IOT_HUB_CON_STR
+from user_input import LED_PIN, SWITCH_PIN
 from azure.iot.device import IoTHubDeviceClient, Message
 
+# adding external folder with Azure constr to python path for import
+sys.path.insert(1,  '../../../azure')
+import azure_constr as az
+
 # setting the connection string and device name using values from the file
-CONNECTION_STRING = IOT_HUB_CON_STR
-deviceID = DEVICE_ID
+CONNECTION_STRING = az.IOT_HUB_CON_STR
+deviceID = az.DEVICE_ID
 
 # Set Broadcom mode so we can address GPIO pins by number.
 io.setmode(io.BCM)
