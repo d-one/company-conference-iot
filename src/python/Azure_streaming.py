@@ -5,9 +5,9 @@ import json
 from user_input import LED_PIN, SWITCH_PIN
 from azure.iot.device import IoTHubDeviceClient, Message
 import os
+
 home_dir = os.path.expanduser('~')
-print(home_dir)
-# adding external folder with Azure constr to python path for import
+
 def read_azure_connection_string(path: str, connection_string_name: str) -> str:
     """Function to read the Azure connection string from a file.
     If the connection string is not found, the function will raise an exception."""
@@ -15,7 +15,7 @@ def read_azure_connection_string(path: str, connection_string_name: str) -> str:
         lines = f.readlines()
         for line in lines:
             if line.startswith(connection_string_name):
-                return "".join(line.split("=")[1:]).strip()
+                return "=".join(line.split("=")[1:]).strip()
     raise Exception(f"Azure Connection string {connection_string_name} not found in file {path}")
         
 def read_azure_device_id(path: str, device_id_name: str) -> str:
