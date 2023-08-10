@@ -5,7 +5,7 @@ import json
 from user_input import LED_PIN, SWITCH_PIN
 from azure.iot.device import IoTHubDeviceClient, Message
 import os
-home_dir = os.path.expanduser()
+home_dir = os.path.expanduser('~')
 print(home_dir)
 # adding external folder with Azure constr to python path for import
 def read_azure_connection_string(path: str, connection_string_name: str) -> str:
