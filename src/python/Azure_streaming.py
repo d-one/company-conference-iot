@@ -73,7 +73,7 @@ def iothub_client_telemetry_sample_run():
                 magnet = 0
                 io.output(LED_PIN, io.LOW)
                 # needs to be a python dict, otherwsie de-serialization errors will occur on Azure sid
-                msg_dict = {"messageEpoch":messageEpoch, "deviceID":deviceID, "magnet":magnet, "pin_num":SWITCH_PIN}
+                msg_dict = {"messageEpoch":messageEpoch, "deviceID": device_id, "magnet":magnet, "pin_num":SWITCH_PIN}
                 message = Message(json.dumps(msg_dict))
                 # ensure proper encoding and content type are enforced (again to avoid de-serialization issues)
                 message.content_encoding = "utf-8"
