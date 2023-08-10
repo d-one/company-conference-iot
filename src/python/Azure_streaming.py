@@ -30,7 +30,7 @@ def read_azure_device_id(path: str, device_id_name: str) -> str:
         
 # setting the connection string and device name using values from the file
 azure_config_filepath = f'{home_dir}/azure_constr.txt'
-connection_string = read_azure_connection_string(path=azure_config_filepath, connection_string_name="CONNECTION_STRING")
+connection_string = read_azure_connection_string(path=azure_config_filepath, connection_string_name="IOT_HUB_CON_STR")
 device_id = read_azure_device_id(path=azure_config_filepath, device_id_name="DEVICE_ID")
 
 # Set Broadcom mode so we can address GPIO pins by number.
