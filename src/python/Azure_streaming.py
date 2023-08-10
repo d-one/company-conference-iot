@@ -15,7 +15,7 @@ def read_azure_connection_string(path: str, connection_string_name: str) -> str:
         lines = f.readlines()
         for line in lines:
             if line.startswith(connection_string_name):
-                return line.split("=")[1].strip()
+                return "".join(line.split("=")[1:]).strip()
     raise Exception(f"Azure Connection string {connection_string_name} not found in file {path}")
         
 def read_azure_device_id(path: str, device_id_name: str) -> str:
