@@ -6,12 +6,30 @@ from user_input import LED_PIN, SWITCH_PIN
 from azure.iot.device import IoTHubDeviceClient, Message
 
 # adding external folder with Azure constr to python path for import
-sys.path.insert(1,  '../../../azure')
-import azure_constr as az
-
+def read_azure_connection_string(path: str, connection_string_name: str) -> str:
+    """Function to read the Azure connection string from a file.
+    If the connection string is not found, the function will raise an exception."""
+    with open(path, "r") as f:
+        lines = f.readlines()
+        for line in lines:
+            if line.startswith(connection_string_name):
+                return line.split("=")[1].strip()
+    raise Exception(f"Azure Connection string {connection_string_name} not found in file {path}")
+        
+def read_azure_device_id(path: str, device_id_name: str) -> str:
+    """Function to read the Azure device id from a file.
+    If the device id is not found, the function will raise an exception."""
+    with open(path, "r") as f:
+        lines = f.readlines()
+        for line in lines:
+            if line.startswith(device_id_name):
+                return line.split("=")[1].strip()
+    raise Exception(f"Azure Device ID {device_id_name} not found in file {path}")
+        
 # setting the connection string and device name using values from the file
-CONNECTION_STRING = az.IOT_HUB_CON_STR
-deviceID = az.DEVICE_ID
+azure_config_filepath = '../../azure_constr.txt'
+connection_string = read_azure_connection_string(path=azure_config_filepath, connection_string_name="CONNECTION_STRING")
+device_id = read_azure_device_id(path=azure_config_filepath, device_id_name="DEVICE_ID")
 
 # Set Broadcom mode so we can address GPIO pins by number.
 io.setmode(io.BCM)
@@ -24,7 +42,7 @@ magnet = 0
 
 def iothub_client_init():
     # Create an IoT Hub client using protocol MQTT v3.1.1 over WebSocket on port 443.
-    client = IoTHubDeviceClient.create_from_connection_string(CONNECTION_STRING, websockets=True) 
+    client = IoTHubDeviceClient.create_from_connection_string(connection_string, websockets=True) 
     return client
 
 def iothub_client_telemetry_sample_run():
@@ -39,7 +57,7 @@ def iothub_client_telemetry_sample_run():
             if (io.input(SWITCH_PIN) == 0):
                 magnet = 1
                 io.output(LED_PIN, io.HIGH)
-                msg_dict = {"messageEpoch":messageEpoch, "deviceID":deviceID, "magnet":magnet, "pin_num":SWITCH_PIN}
+                msg_dict = {"messageEpoch": messageEpoch, "deviceID": device_id, "magnet": magnet, "pin_num": SWITCH_PIN}
                 message = Message(json.dumps(msg_dict))
                 # ensure proper encoding and content type are enforced (again to avoid de-serialization issues)
                 message.content_encoding = "utf-8"
