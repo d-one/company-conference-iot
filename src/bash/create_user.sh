@@ -1,4 +1,4 @@
-!/bin/bash
+#!/bin/bash
 USER_NAME=${1:-test1} # first parameter takes in the username, defaults to test1
 PWD=${2:-$USER_NAME} # second parameter takes in the user pwd, defaults to the first parameter value
 sudo pkill -KILL -u $USER_NAME
